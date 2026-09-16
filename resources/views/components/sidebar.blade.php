@@ -1,4 +1,8 @@
-```php
+```blade
+@php
+    $role = auth()->user()->role;
+@endphp
+
 <div class="main-sidebar sidebar-style-2">
     <aside id="sidebar-wrapper" class="d-flex flex-column">
 
@@ -27,101 +31,122 @@
 
 
                 {{-- MANAGEMENT --}}
-                <li class="menu-header">MANAGEMENT</li>
+                @if(in_array($role, ['admin', 'staff']))
+                    <li class="menu-header">MANAGEMENT</li>
+                @endif
 
                 {{-- Products --}}
-                <li class="{{ Request::routeIs('products.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('products.index') }}">
-                        <i class="fas fa-boxes"></i>
-                        <span>Products</span>
-                    </a>
-                </li>
+                @if(in_array($role, ['admin', 'staff']))
+                    <li class="{{ Request::routeIs('products.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('products.index') }}">
+                            <i class="fas fa-boxes"></i>
+                            <span>Products</span>
+                        </a>
+                    </li>
+                @endif
 
                 {{-- Categories --}}
-                <li class="{{ Request::routeIs('categories.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('categories.index') }}">
-                        <i class="fas fa-tags"></i>
-                        <span>Categories</span>
-                    </a>
-                </li>
+                @if(in_array($role, ['admin', 'staff']))
+                    <li class="{{ Request::routeIs('categories.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('categories.index') }}">
+                            <i class="fas fa-tags"></i>
+                            <span>Categories</span>
+                        </a>
+                    </li>
+                @endif
 
-                {{-- Users --}}
-                <li class="{{ Request::routeIs('users.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('users.index') }}">
-                        <i class="fas fa-users"></i>
-                        <span>Users</span>
-                    </a>
-                </li>
-
-
-                {{-- TRANSACTIONS --}}
-                <li class="menu-header">TRANSACTIONS</li>
-
-                {{-- Orders --}}
-                <li class="{{ Request::routeIs('orders.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-cash-register"></i>
-                        <span>Orders</span>
-                    </a>
-                </li>
-
-                {{-- History --}}
-                <li class="{{ Request::routeIs('history.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-history"></i>
-                        <span>History</span>
-                    </a>
-                </li>
-
-                {{-- Expenses --}}
-                <li class="{{ Request::routeIs('expenses.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>Expenses</span>
-                    </a>
-                </li>
+                {{-- Users - ADMIN ONLY --}}
+                @if($role === 'admin')
+                    <li class="{{ Request::routeIs('users.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">
+                            <i class="fas fa-users"></i>
+                            <span>Users</span>
+                        </a>
+                    </li>
+                @endif
 
 
-                {{-- REPORTS --}}
-                <li class="menu-header">REPORTS</li>
+                {{-- TRANSACTIONS - ADMIN ONLY --}}
+                @if($role === 'admin')
 
-                {{-- Sales Report --}}
-                <li class="{{ Request::routeIs('sales-report.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-chart-line"></i>
-                        <span>Sales Report</span>
-                    </a>
-                </li>
+                    <li class="menu-header">TRANSACTIONS</li>
 
-                {{-- Transactions Report --}}
-                <li class="{{ Request::routeIs('transactions-report.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-chart-bar"></i>
-                        <span>Transactions Report</span>
-                    </a>
-                </li>
+                    {{-- Orders --}}
+                    <li class="{{ Request::routeIs('orders.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cash-register"></i>
+                            <span>Orders</span>
+                        </a>
+                    </li>
+
+                    {{-- History --}}
+                    <li class="{{ Request::routeIs('history.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-history"></i>
+                            <span>History</span>
+                        </a>
+                    </li>
+
+                    {{-- Expenses --}}
+                    <li class="{{ Request::routeIs('expenses.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span>Expenses</span>
+                        </a>
+                    </li>
+
+                @endif
+
+
+                {{-- REPORTS - ADMIN ONLY --}}
+                @if($role === 'admin')
+
+                    <li class="menu-header">REPORTS</li>
+
+                    {{-- Sales Report --}}
+                    <li class="{{ Request::routeIs('sales-report.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Sales Report</span>
+                        </a>
+                    </li>
+
+                    {{-- Transactions Report --}}
+                    <li class="{{ Request::routeIs('transactions-report.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Transactions Report</span>
+                        </a>
+                    </li>
+
+                @endif
 
             </ul>
         </div>
+
 
         {{-- SYSTEM MENU --}}
-        <div class="sidebar-bottom mt-auto mb-3">
+        @if($role === 'admin')
 
-            <ul class="sidebar-menu">
+            <div class="sidebar-bottom mt-auto mb-3">
 
-                <li class="menu-header">SYSTEM</li>
+                <ul class="sidebar-menu">
 
-                {{-- Settings --}}
-                <li class="{{ Request::routeIs('settings.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-cog"></i>
-                        <span>Settings</span>
-                    </a>
-                </li>
+                    <li class="menu-header">SYSTEM</li>
 
-            </ul>
+                    {{-- Settings --}}
+                    <li class="{{ Request::routeIs('settings.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="#">
+                            <i class="fas fa-cog"></i>
+                            <span>Settings</span>
+                        </a>
+                    </li>
 
-        </div>
+                </ul>
+
+            </div>
+
+        @endif
 
     </aside>
 </div>
