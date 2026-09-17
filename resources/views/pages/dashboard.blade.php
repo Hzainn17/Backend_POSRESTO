@@ -31,9 +31,6 @@
         <section class="section">
             <div class="section-header">
                 <h1>Dashboard</h1>
-                <span style="margin-left: 15px; font-size: 14px; color: #28a745;">
-                    CI/CD Deployment Test
-                </span>
             </div>
         </section>
     </div>
