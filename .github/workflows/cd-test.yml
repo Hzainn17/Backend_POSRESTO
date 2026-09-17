@@ -35,6 +35,9 @@ jobs:
 
             echo "=== Cache Laravel Configuration ==="
             php artisan config:cache
+
+            echo "=== Cache Laravel Views ==="
+            php artisan view:cache
             
             echo "=== New Commit ==="
             git rev-parse --short HEAD
