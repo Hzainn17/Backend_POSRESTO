@@ -79,7 +79,7 @@ class ProductController extends Controller
 
             $filename = $product->id . '.' . $image->getClientOriginalExtension();
 
-            $image->storeAs('products', $filename);
+            $image->storeAs('products', $filename, 'public');
 
             // FIX INI
             $product->image = 'products/' . $filename;
@@ -120,7 +120,7 @@ class ProductController extends Controller
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $filename = $product->id . '.' . $image->getClientOriginalExtension();
-            $image->storeAs('products', $filename);
+            $image->storeAs('products', $filename, 'public');
             $product->image = 'products/' . $filename;
 
             $product->save();
