@@ -1,14 +1,14 @@
-name: CD Connection Test
+name: CD Deploy
 
 on:
   workflow_dispatch:
 
 jobs:
-  deploy-test:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Test server project
+      - name: Deploy to server
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: 139.190.97.127
@@ -17,11 +17,11 @@ jobs:
           script: |
             cd /var/www/Backend_POSRESTO
 
-            echo "=== Server Project ==="
-            pwd
-
-            echo "=== Git Branch ==="
-            git branch --show-current
-
             echo "=== Current Commit ==="
+            git rev-parse --short HEAD
+
+            echo "=== Pull Latest Code ==="
+            git pull origin main
+
+            echo "=== New Commit ==="
             git rev-parse --short HEAD
