@@ -1,0 +1,21 @@
+name: SSH Connection Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: 139.190.97.127
+          username: posresto
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "SSH connection berhasil!"
+            whoami
+            hostname
+            pwd
