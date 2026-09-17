@@ -25,6 +25,8 @@ jobs:
 
             echo "=== Install Composer Dependencies ==="
             composer install --no-interaction --prefer-dist --optimize-autoloader
-
+            echo "=== Run Database Migration ==="
+            php artisan migrate --force
+            
             echo "=== New Commit ==="
             git rev-parse --short HEAD
