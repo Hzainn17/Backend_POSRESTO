@@ -1,0 +1,27 @@
+name: CD Connection Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test server project
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: 139.190.97.127
+          username: posresto
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/Backend_POSRESTO
+
+            echo "=== Server Project ==="
+            pwd
+
+            echo "=== Git Branch ==="
+            git branch --show-current
+
+            echo "=== Current Commit ==="
+            git rev-parse --short HEAD
