@@ -34,5 +34,10 @@ Route::middleware(['auth'])->group(function () {
             'users',
             \App\Http\Controllers\UserController::class
         );
+        // Financial & Sales Report
+        Route::get(
+            '/reports/finance',
+            [\App\Http\Controllers\ReportController::class, 'finance']
+        )->name('reports.finance');
     });
 });

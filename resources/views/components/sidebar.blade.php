@@ -65,56 +65,31 @@
                 @endif
 
 
-                {{-- TRANSACTIONS --}}
+                {{-- TRANSACTIONS - tersedia untuk admin dan staff --}}
                 @if(in_array($role, ['admin', 'staff']))
 
-                    <li class="menu-header">TRANSACTIONS</li>
+                    <li class="menu-header">TRANSAKSI</li>
 
-                    {{-- Orders --}}
+                    {{-- Riwayat Order --}}
                     <li class="{{ Request::routeIs('orders.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('orders.index') }}">
-                            <i class="fas fa-cash-register"></i>
-                            <span>Orders</span>
-                        </a>
-                    </li>
-
-                    {{-- History --}}
-                    <li class="{{ Request::routeIs('history.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-history"></i>
-                            <span>History</span>
-                        </a>
-                    </li>
-
-                    {{-- Expenses --}}
-                    <li class="{{ Request::routeIs('expenses.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-money-bill-wave"></i>
-                            <span>Expenses</span>
+                            <i class="fas fa-receipt"></i>
+                            <span>Riwayat Order</span>
                         </a>
                     </li>
 
                 @endif
 
-
-                {{-- REPORTS - ADMIN ONLY --}}
+                {{-- LAPORAN - admin saja --}}
                 @if($role === 'admin')
 
-                    <li class="menu-header">REPORTS</li>
+                    <li class="menu-header">LAPORAN</li>
 
-                    {{-- Sales Report --}}
-                    <li class="{{ Request::routeIs('sales-report.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="#">
+                    {{-- Laporan Keuangan --}}
+                    <li class="{{ Request::routeIs('reports.finance') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('reports.finance') }}">
                             <i class="fas fa-chart-line"></i>
-                            <span>Sales Report</span>
-                        </a>
-                    </li>
-
-                    {{-- Transactions Report --}}
-                    <li class="{{ Request::routeIs('transactions-report.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-chart-bar"></i>
-                            <span>Transactions Report</span>
+                            <span>Laporan Keuangan</span>
                         </a>
                     </li>
 
@@ -122,30 +97,6 @@
 
             </ul>
         </div>
-
-
-        {{-- SYSTEM MENU --}}
-        @if($role === 'admin')
-
-            <div class="sidebar-bottom mt-auto mb-3">
-
-                <ul class="sidebar-menu">
-
-                    <li class="menu-header">SYSTEM</li>
-
-                    {{-- Settings --}}
-                    <li class="{{ Request::routeIs('settings.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="#">
-                            <i class="fas fa-cog"></i>
-                            <span>Settings</span>
-                        </a>
-                    </li>
-
-                </ul>
-
-            </div>
-
-        @endif
 
     </aside>
 </div>
