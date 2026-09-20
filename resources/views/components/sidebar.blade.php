@@ -1,4 +1,3 @@
-```blade
 @php
     $role = auth()->user()->role;
 @endphp
@@ -66,14 +65,14 @@
                 @endif
 
 
-                {{-- TRANSACTIONS - ADMIN ONLY --}}
-                @if($role === 'admin')
+                {{-- TRANSACTIONS --}}
+                @if(in_array($role, ['admin', 'staff']))
 
                     <li class="menu-header">TRANSACTIONS</li>
 
                     {{-- Orders --}}
                     <li class="{{ Request::routeIs('orders.*') ? 'active' : '' }}">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="{{ route('orders.index') }}">
                             <i class="fas fa-cash-register"></i>
                             <span>Orders</span>
                         </a>
@@ -174,4 +173,3 @@
         transform: translateX(4px);
     }
 </style>
-```

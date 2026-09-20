@@ -1,31 +1,34 @@
-name: CD Deploy
+name: CD Staging Deploy
 
 on:
   workflow_run:
     workflows: ["Laravel CI"]
+    branches:
+      - staging
     types:
       - completed
+  workflow_dispatch:
 
 jobs:
-  deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+  deploy-staging:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Deploy to server
+      - name: Deploy to Staging Server
         uses: appleboy/ssh-action@v1.2.2
         with:
           host: 139.190.97.127
           username: posresto
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /var/www/Backend_POSRESTO
+            cd /var/www/Backend_POSRESTO_staging
 
-            echo "=== Current Commit ==="
+            echo "=== Current Commit (Staging) ==="
             git rev-parse --short HEAD
 
-            echo "=== Pull Latest Code ==="
-            git pull origin main
+            echo "=== Pull Latest Staging Code ==="
+            git pull origin staging
 
             echo "=== Install Composer Dependencies ==="
             composer install --no-interaction --prefer-dist --optimize-autoloader
@@ -33,14 +36,13 @@ jobs:
             echo "=== Run Database Migration ==="
             php artisan migrate --force
 
+            echo "=== Storage Link ==="
+            php artisan storage:link || true
+
             echo "=== Cache Laravel Configuration ==="
             php artisan config:cache
-
-            echo "=== Cache Laravel Views ==="
             php artisan view:cache
-
-            echo "=== Cache Laravel Routes ==="
             php artisan route:cache
-            
-            echo "=== New Commit ==="
+
+            echo "=== New Staging Commit ==="
             git rev-parse --short HEAD

@@ -1,0 +1,52 @@
+name: CD Production Deploy (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirmation:
+        description: 'Ketik "DEPLOY" untuk konfirmasi deploy ke Production'
+        required: true
+        default: 'DEPLOY'
+
+jobs:
+  deploy-production:
+    if: ${{ github.event.inputs.confirmation == 'DEPLOY' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy to Production Server
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: 139.190.97.127
+          username: posresto
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/Backend_POSRESTO
+
+            echo "=== Current Commit (Production) ==="
+            git rev-parse --short HEAD
+
+            echo "=== Pull Latest Code from Main ==="
+            git fetch origin main
+            git reset --hard origin/main
+
+            echo "=== Install Composer Dependencies ==="
+            composer install --no-interaction --prefer-dist --optimize-autoloader
+
+            echo "=== Run Database Migration ==="
+            php artisan migrate --force
+
+            echo "=== Storage Link ==="
+            php artisan storage:link || true
+
+            echo "=== Cache Laravel Configuration ==="
+            php artisan config:cache
+
+            echo "=== Cache Laravel Views ==="
+            php artisan view:cache
+
+            echo "=== Cache Laravel Routes ==="
+            php artisan route:cache
+
+            echo "=== New Commit (Production) ==="
+            git rev-parse --short HEAD
